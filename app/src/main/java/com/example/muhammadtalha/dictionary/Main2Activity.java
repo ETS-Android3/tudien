@@ -1,0 +1,323 @@
+package com.example.muhammadtalha.dictionary;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+
+import android.text.InputType;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Scanner;
+
+import static android.icu.lang.UCharacter.toLowerCase;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+public class Main2Activity extends AppCompatActivity {
+
+    private static final String TAG = "Main2Activity";
+
+    private TextView mTextMessage;
+    private Button mButton,changeLanguage;
+    private EditText mEditText;
+    int flag = 0;
+   // Mapp1<String, String> map = new Mapp1<>();
+    String key,value;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+
+
+       /* mButton = findViewById(R.id.button2);
+
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search();
+            }
+        });
+
+        mEditText = findViewById(R.id.edittext2);
+          mEditText.setInputType(InputType.TYPE_CLASS_TEXT |
+                InputType.TYPE_TEXT_VARIATION_NORMAL);
+        mEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                formMap();
+            }
+        });
+        */
+        changeLanguage = findViewById(R.id.btn_2);
+        changeLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(Main2Activity.this,MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+    public void onTimkiem2(View view) {
+        mEditText= findViewById(R.id.edittext2);
+        String theword =toLowerCase(mEditText.getText().toString().trim().replaceAll(" +"," ")) ;
+        String defintion = findDefintion(theword);
+        TextView thedef = findViewById(R.id.meaning2);
+        if(defintion!=null)
+            thedef.setText(defintion);
+        else
+            thedef.setText("Không tìm thấy từ!");
+    }
+
+    private String findDefintion(String theword) {
+        try {
+            InputStream input = getAssets().open("tudienvietanh.txt");
+            Scanner scanner = new Scanner(input);
+            while(scanner.hasNext())
+            {
+                String line =toLowerCase(scanner.nextLine()) ;
+                String[] pieces= line.split(":");
+                if(pieces[0].equalsIgnoreCase(theword.trim())){
+                    return pieces[1];
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  null;
+
+    }
+    /*private void formMap(){
+        if(flag == 0){
+            try {
+
+                InputStream inputStream = getAssets().open("tudienvietanh.txt");
+                //int size = inputStream.available();
+                // Log.d("SIZEOFFILE", "size of file is: " + size);
+                Scanner scanner = new Scanner(inputStream);
+                while(scanner.hasNext()){
+                    key = toLowerCase(scanner.next());
+                    // Log.d("WORDS", "WORD: " + key);
+                    value = scanner.nextLine();
+                    map.add(key,value);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            flag++;}
+    }
+    *//*private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    mTextMessage.setText(R.string.title_home);
+                    return true;
+                case R.id.navigation_dashboard:
+                    mTextMessage.setText(R.string.title_dashboard);
+                    return true;
+                case R.id.navigation_notifications:
+                    mTextMessage.setText(R.string.title_notifications);
+                    return true;
+            }
+            return false;
+        }
+    };*//*
+
+    private void search(){
+
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        //inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        EditText search = findViewById(R.id.edittext2);
+        String key1 = search.getText().toString().trim();
+        Log.d(TAG, "search: ");
+        key1 = toLowerCase(key1);
+        String value1 = map.get(key1);
+        TextView meaning= findViewById(R.id.meaning2);
+        if (value1 == null){
+            meaning.setText("Xin lỗi, không tìm thấy từ!");
+        } else {
+            meaning.setText(value1.toString());
+        }
+
+    }
+}
+class HashNodee<K, V>
+{
+    K key;
+    V value;
+
+    // Reference to next node
+    HashNodee<K, V> next;
+
+    // Constructor
+    public HashNodee(K key, V value)
+    {
+        this.key = key;
+        this.value = value;
+    }
+}
+class Mapp1<K, V>
+{
+    // bucketArray is used to store array of chains
+    private ArrayList<HashNodee<K, V>> bucketArray;
+
+    // Current capacity of array list
+    private int numBuckets;
+
+    // Current size of array list
+    private int size;
+
+    // Constructor (Initializes capacity, size and
+    // empty chains.
+    public Mapp1()
+    {
+        bucketArray = new ArrayList<>();
+        numBuckets = 1000;
+        size = 0;
+
+        // Create empty chains
+        for (int i = 0; i < numBuckets; i++)
+            bucketArray.add(null);
+    }
+
+    public int size() { return size; }
+    public boolean isEmpty() { return size() == 0; }
+
+    // This implements hash function to find index
+    // for a key
+    private int getBucketIndex(K key)
+    {
+        int hashCode = key.hashCode();
+        if(hashCode<0)
+            hashCode *= -1;
+        int index = hashCode % numBuckets;
+        return index;
+    }
+
+    // Method to remove a given key
+    public V remove(K key)
+    {
+        // Apply hash function to find index for given key
+        int bucketIndex = getBucketIndex(key);
+
+        // Get head of chain
+        HashNodee<K, V> head = bucketArray.get(bucketIndex);
+
+        // Search for key in its chain
+        HashNodee<K, V> prev = null;
+        while (head != null)
+        {
+            // If Key found
+            if (head.key.equals(key))
+                break;
+
+            // Else keep moving in chain
+            prev = head;
+            head = head.next;
+        }
+
+        // If key was not there
+        if (head == null)
+            return null;
+
+        // Reduce size
+        size--;
+
+        // Remove key
+        if (prev != null)
+            prev.next = head.next;
+        else
+            bucketArray.set(bucketIndex, head.next);
+
+        return head.value;
+    }
+
+    // Returns value for a key
+    public V get(K key)
+    {
+        // Find head of chain for given key
+        int bucketIndex = getBucketIndex(key);
+        HashNodee<K, V> head = bucketArray.get(bucketIndex);
+
+        // Search key in chain
+        while (head != null)
+        {
+            if (head.key.equals(key))
+                return head.value;
+            head = head.next;
+        }
+
+        // If key not found
+        return null;
+    }
+
+    // Adds a key value pair to hash
+    public void add(K key, V value)
+    {
+        // Find head of chain for given key
+        int bucketIndex = getBucketIndex(key);
+        HashNodee<K, V> head = bucketArray.get(bucketIndex);
+
+        // Check if key is already present
+        while (head != null)
+        {
+            if (head.key.equals(key))
+            {
+                head.value = value;
+                return;
+            }
+            head = head.next;
+        }
+
+        // Insert key in chain
+        size++;
+        head = bucketArray.get(bucketIndex);
+        HashNodee<K, V> newNode = new HashNodee<K, V>(key, value);
+        newNode.next = head;
+        bucketArray.set(bucketIndex, newNode);
+
+
+        if ((1.0*size)/numBuckets >= 0.7)
+        {
+            ArrayList<HashNodee<K, V>> temp = bucketArray;
+            bucketArray = new ArrayList<>();
+            numBuckets = 2 * numBuckets;
+            size = 0;
+            for (int i = 0; i < numBuckets; i++)
+                bucketArray.add(null);
+
+            for (HashNodee<K, V> headNode : temp)
+            {
+                while (headNode != null)
+                {
+                    add(headNode.key, headNode.value);
+                    headNode = headNode.next;
+                }
+            }
+        }
+    }*/
+}

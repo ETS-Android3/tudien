@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="#C8FFF4">
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/btn_1"
+        android:textColor="#00BCD4"
+        android:background="#009688"
+        android:text="EN-VN"
+        android:layout_marginLeft="305dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+
+        android:background="@drawable/border"
+        android:fontFamily="sans-serif"
+        android:hint="Nhập từ cần tìm"
+        android:inputType="none"
+
+        android:padding="7dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:onClick="onTimkiem1"
+
+        android:background="#03dac5"
+        android:padding="10dp"
+        android:text="Tìm kiếm" />
+
+    <TextView
+        android:id="@+id/meaning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        />
+
+
+
+</LinearLayout>
